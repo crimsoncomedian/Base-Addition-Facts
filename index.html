@@ -28,25 +28,26 @@ h1{font-size:clamp(22px,4vw,30px);margin:0 0 10px;text-align:center}
 .sets .pl{font-size:40px;font-weight:800;color:#5e6d81}
 .c{width:30px;height:30px;border-radius:50%;background:var(--b);border:3px solid #2a5fb0;display:inline-block}
 .c.p{background:var(--p);border-color:#6b3da3}
-.pop{animation:pop .45s ease-out both}
+.pop{animation:pop .6s ease-out both}
 @keyframes pop{0%{opacity:0;transform:scale(.4)}100%{opacity:1;transform:none}}
-.arr{text-align:center;font-size:34px;color:#5e6d81;margin:10px 0 2px;opacity:0;animation:fadein .4s ease-out var(--d0) forwards}
+.pop{animation-duration:.6s}
+.arr{text-align:center;font-size:34px;color:#5e6d81;margin:10px 0 2px;opacity:0;animation:fadein .55s ease-out var(--d0) forwards}
 .pw{display:inline-block}
 @keyframes fadein{to{opacity:1}}
 .merged{display:flex;align-items:flex-start;justify-content:center;gap:24px;flex-wrap:wrap;margin-top:8px}
 .box{position:relative;display:flex;flex-wrap:wrap;gap:8px;justify-content:center;padding:14px 12px 12px;border:4px solid transparent;border-radius:18px;max-width:300px;min-width:60px}
 .box .lab{position:absolute;left:50%;top:-16px;transform:translateX(-50%);padding:2px 12px;border-radius:999px;color:#fff;font-weight:800;font-size:17px;white-space:nowrap;opacity:0}
-.box.g{animation:ringG .5s ease-out var(--d2) forwards}
+.box.g{animation:ringG .65s ease-out var(--d2) forwards}
 .box.g .lab{background:var(--g);animation:fadein .4s ease-out calc(var(--d2) + 100ms) forwards}
-.box.l{animation:ringL .5s ease-out var(--d3) forwards}
+.box.l{animation:ringL .65s ease-out var(--d3) forwards}
 .box.l .lab{background:var(--o);animation:fadein .4s ease-out calc(var(--d3) + 100ms) forwards}
-.box.g .c{animation:toG .4s ease-out var(--d2) forwards}
-.box.l .c{animation:toL .4s ease-out var(--d3) forwards}
+.box.g .c{animation:toG .55s ease-out var(--d2) forwards}
+.box.l .c{animation:toL .55s ease-out var(--d3) forwards}
 @keyframes ringG{to{border-color:var(--g);background:#e7f5ee}}
 @keyframes ringL{to{border-color:var(--o);background:#fdf0df}}
 @keyframes toG{to{background:var(--g);border-color:#0e5f41}}
 @keyframes toL{to{background:var(--o);border-color:#a85f10}}
-.ans{display:flex;justify-content:center;align-items:flex-start;gap:14px;margin-top:26px;opacity:0;animation:fadein .5s ease-out var(--d4) forwards}
+.ans{display:flex;justify-content:center;align-items:flex-start;gap:14px;margin-top:26px;opacity:0;animation:fadein .65s ease-out var(--d4) forwards}
 .dgt{display:flex;flex-direction:column;align-items:center;gap:6px}
 .dgt .n{font-size:72px;font-weight:800;line-height:1}
 .dgt .pill{padding:3px 14px;border-radius:999px;font-weight:800;font-size:16px;color:#fff}
@@ -93,7 +94,7 @@ function check(){
 }
 function setMsg(t){$('msg').className='msg';$('msg').textContent=t;}
 function shake(el){el.classList.remove('shake');void el.offsetWidth;el.classList.add('shake');}
-const circles=(n,cls,delay)=>Array.from({length:n},(_,i)=>`<span class="c ${cls} pop" style="animation-delay:${delay+i*60}ms"></span>`).join('');
+const circles=(n,cls,delay)=>Array.from({length:n},(_,i)=>`<span class="c ${cls} pop" style="animation-delay:${Math.round(delay*1.3)+Math.round(i*60*1.3)}ms"></span>`).join('');
 function show(){
  if(mode!=='ask')return;
  mode='show';const sum=a+c,s=expected(),inp=$('ans');
@@ -101,8 +102,8 @@ function show(){
  $('check').hidden=true;$('show').hidden=true;$('next').hidden=false;
  const groups=Math.floor(sum/base),left=sum%base;
  // the merged array: first `base` circles make the group, the rest are leftovers
- const n=sum,d0=n*60+550,d1=d0+450,d2=d1+n*45+600,d3=groups>0&&left>0?d2+1100:d2+(groups>0?1100:0),d4=d3+(left>0||groups===0?1100:700);
- const all=[];for(let i=0;i<sum;i++)all.push(`<span class="pw pop" style="animation-delay:${d1+i*45}ms"><span class="c ${i<a?'':'p'}"></span></span>`);
+ const F=1.3,n=sum,d0=Math.round((n*60+550)*F),d1=d0+Math.round(450*F),d2=d1+Math.round((n*45+600)*F),d3=groups>0&&left>0?d2+Math.round(1100*F):d2+(groups>0?Math.round(1100*F):0),d4=d3+Math.round((left>0||groups===0?1100:700)*F);
+ const all=[];for(let i=0;i<sum;i++)all.push(`<span class="pw pop" style="animation-delay:${d1+Math.round(i*45*F)}ms"><span class="c ${i<a?'':'p'}"></span></span>`);
  const grpHtml=groups>0?`<div class="box g"><span class="lab">1 group of ${base}</span>${all.slice(0,base).join('')}</div>`:'';
  const leftSrc=all.slice(groups>0?base:0);
  const leftHtml=left>0?`<div class="box l"><span class="lab">${left} left over</span>${leftSrc.join('')}</div>`:`<div class="box l"><span class="lab">0 left over</span></div>`;
