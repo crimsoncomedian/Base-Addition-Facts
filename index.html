@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Base Addition Facts</title>
+<style>
+:root{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#18253a;background:#f5f7fb;--g:#16825a;--o:#d9801a;--b:#3f7fd6;--p:#8a55c7}
+*{box-sizing:border-box}body{margin:0;padding:20px}.app{max-width:680px;margin:auto}
+h1{font-size:clamp(22px,4vw,30px);margin:0 0 10px;text-align:center}
+.card{background:#fff;border:1px solid #d9e1eb;border-radius:16px;padding:22px 18px;margin:12px 0;box-shadow:0 2px 8px #152b4310}
+.badge{display:block;width:max-content;margin:0 auto 10px;padding:6px 16px;border-radius:999px;background:#eeeafe;color:#5144c6;font-weight:800;font-size:18px}
+.prob{display:flex;align-items:center;justify-content:center;gap:16px;font-size:clamp(44px,12vw,72px);font-weight:800;flex-wrap:wrap}
+.prob .op{color:#5e6d81}
+.prob input{width:2.2em;height:1.2em;font-size:inherit;font-weight:800;text-align:center;border:4px solid #5144c6;border-radius:14px;font-family:inherit;background:#fff;padding:0}
+.prob input:focus{outline:4px solid #b6aef5;outline-offset:2px}
+.prob input:disabled{background:#f5f7fb;border-color:#c8d3e2}
+.btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:18px}
+.btn{border:1px solid #5144c6;border-radius:12px;background:#5144c6;color:#fff;padding:13px 22px;font-size:18px;font-weight:700;cursor:pointer}
+.btn.alt{background:#fff;color:#5144c6}
+.btn[hidden]{display:none}
+.msg{text-align:center;min-height:30px;margin-top:14px;font-weight:700;font-size:18px;color:#bb3d3d}
+.msg.good{color:#18845a;font-size:22px}
+.shake{animation:wig .4s}@keyframes wig{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
+/* set model */
+.model{margin-top:22px;border-top:2px dashed #d5dce8;padding-top:20px}
+.sets{display:flex;align-items:center;justify-content:center;gap:18px;flex-wrap:wrap}
+.set{display:flex;flex-wrap:wrap;gap:8px;max-width:230px;justify-content:center}
+.sets .pl{font-size:40px;font-weight:800;color:#5e6d81}
+.c{width:30px;height:30px;border-radius:50%;background:var(--b);border:3px solid #2a5fb0;display:inline-block}
+.c.p{background:var(--p);border-color:#6b3da3}
+.pop{animation:pop .45s ease-out both}
+@keyframes pop{0%{opacity:0;transform:scale(.4)}100%{opacity:1;transform:none}}
+.arr{text-align:center;font-size:34px;color:#5e6d81;margin:10px 0 2px;opacity:0;animation:fadein .4s ease-out 1s forwards}
+@keyframes fadein{to{opacity:1}}
+.merged{display:flex;align-items:flex-start;justify-content:center;gap:24px;flex-wrap:wrap;margin-top:8px}
+.box{position:relative;display:flex;flex-wrap:wrap;gap:8px;justify-content:center;padding:14px 12px 12px;border:4px solid transparent;border-radius:18px;max-width:300px;min-width:60px}
+.box .lab{position:absolute;left:50%;top:-16px;transform:translateX(-50%);padding:2px 12px;border-radius:999px;color:#fff;font-weight:800;font-size:17px;white-space:nowrap;opacity:0}
+.box.g{animation:ringG .5s ease-out 2s forwards}
+.box.g .lab{background:var(--g);animation:fadein .4s ease-out 2.1s forwards}
+.box.l{animation:ringL .5s ease-out 3s forwards}
+.box.l .lab{background:var(--o);animation:fadein .4s ease-out 3.1s forwards}
+.box.g .c{animation:toG .4s ease-out 2s forwards}
+.box.l .c{animation:toL .4s ease-out 3s forwards}
+@keyframes ringG{to{border-color:var(--g);background:#e7f5ee}}
+@keyframes ringL{to{border-color:var(--o);background:#fdf0df}}
+@keyframes toG{to{background:var(--g);border-color:#0e5f41}}
+@keyframes toL{to{background:var(--o);border-color:#a85f10}}
+.ans{display:flex;justify-content:center;align-items:flex-start;gap:14px;margin-top:26px;opacity:0;animation:fadein .5s ease-out 4s forwards}
+.dgt{display:flex;flex-direction:column;align-items:center;gap:6px}
+.dgt .n{font-size:72px;font-weight:800;line-height:1}
+.dgt .pill{padding:3px 14px;border-radius:999px;font-weight:800;font-size:16px;color:#fff}
+.dgt.t .n{color:var(--g)}.dgt.t .pill{background:var(--g)}
+.dgt.o .n{color:var(--o)}.dgt.o .pill{background:var(--o)}
+.dgt.z .n{color:#c3ccd9}.dgt.z .pill{background:#c3ccd9}
+.note{text-align:center;color:#5e6d81;font-weight:700;margin-top:6px}
+</style>
+</head>
+<body><main class="app">
+<h1>Addition Facts in Other Bases</h1>
+<section class="card">
+ <span class="badge" id="badge"></span>
+ <div class="prob"><span id="a"></span><span class="op">+</span><span id="c"></span><span class="op">=</span><input id="ans" inputmode="numeric" maxlength="2" autocomplete="off" aria-label="Answer"></div>
+ <div class="msg" id="msg" role="status" aria-live="polite"></div>
+ <div class="btns"><button class="btn" id="check" type="button">Check</button><button class="btn alt" id="show" type="button">Show me</button><button class="btn" id="next" type="button" hidden>Next &#8594;</button></div>
+ <div class="model" id="model" hidden></div>
+</section>
+</main>
+<script>
+(()=>{
+const $=id=>document.getElementById(id);
+let base=5,a=3,c=4,mode='ask',last='';
+const words=['','','two','three','four','five','six','seven','eight','nine'];
+function newProblem(){
+ let b,x,y,key;
+ do{b=2+Math.floor(Math.random()*8);const wantCarry=Math.random()<.65;let tries=0;
+  do{x=1+Math.floor(Math.random()*(b-1));y=1+Math.floor(Math.random()*(b-1));tries++;}while(wantCarry&&x+y<b&&tries<30);
+  key=b+':'+x+':'+y;}while(key===last);
+ last=key;base=b;a=x;c=y;mode='ask';
+ $('badge').textContent='base '+base;$('a').textContent=a;$('c').textContent=c;
+ const inp=$('ans');inp.value='';inp.disabled=false;$('msg').textContent='';$('msg').className='msg';
+ $('check').hidden=false;$('show').hidden=false;$('next').hidden=true;$('model').hidden=true;$('model').innerHTML='';
+ inp.focus();
+}
+const expected=()=>(a+c).toString(base);
+function check(){
+ if(mode!=='ask')return;
+ const inp=$('ans'),v=inp.value.trim();if(v==='')return;
+ const bad=[...v].some(ch=>ch<'0'||ch>'9'||+ch>=base);
+ if(bad){inp.value='';shake(inp);setMsg(`In base ${base}, only the digits 0 to ${base-1} are used.`);return;}
+ if(v===expected()){mode='right';inp.disabled=true;$('msg').className='msg good';$('msg').textContent='✓ Great!';$('check').hidden=true;$('show').hidden=true;$('next').hidden=false;$('next').focus();return;}
+ inp.value='';shake(inp);setMsg('Not quite. Try again, or tap Show me.');
+}
+function setMsg(t){$('msg').className='msg';$('msg').textContent=t;}
+function shake(el){el.classList.remove('shake');void el.offsetWidth;el.classList.add('shake');}
+const circles=(n,cls,delay)=>Array.from({length:n},(_,i)=>`<span class="c ${cls} pop" style="animation-delay:${delay+i*60}ms"></span>`).join('');
+function show(){
+ if(mode!=='ask')return;
+ mode='show';const sum=a+c,s=expected(),inp=$('ans');
+ inp.value=s;inp.disabled=true;setMsg('');
+ $('check').hidden=true;$('show').hidden=true;$('next').hidden=false;
+ const groups=Math.floor(sum/base),left=sum%base;
+ // the merged array: first `base` circles make the group, the rest are leftovers
+ const all=[];for(let i=0;i<sum;i++)all.push(`<span class="c ${i<a?'':'p'}"></span>`);
+ const grpHtml=groups>0?`<div class="box g"><span class="lab">1 group of ${base}</span>${all.slice(0,base).join('')}</div>`:'';
+ const leftSrc=all.slice(groups>0?base:0);
+ const leftHtml=left>0?`<div class="box l"><span class="lab">${left} left over</span>${leftSrc.join('')}</div>`:`<div class="box l"><span class="lab">0 left over</span></div>`;
+ const tens=groups>0?`<div class="dgt t"><span class="n">${s[0]}</span><span class="pill">10s</span></div>`:'';
+ const ones=`<div class="dgt o"><span class="n">${s[s.length-1]}</span><span class="pill">1s</span></div>`;
+ $('model').innerHTML=`<div class="sets"><div class="set">${circles(a,'',0)}</div><span class="pl">+</span><div class="set">${circles(c,'p',a*60+200)}</div></div>
+ <div class="arr" aria-hidden="true">↓</div>
+ <div class="merged">${grpHtml}${leftHtml}</div>
+ ${groups>0?'':`<div class="note">Not enough for a group of ${base}.</div>`}
+ <div class="ans">${tens}${ones}</div>`;
+ $('model').hidden=false;
+ $('model').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+$('check').onclick=check;$('show').onclick=show;$('next').onclick=newProblem;
+$('ans').onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();e.stopPropagation();check();}};
+document.addEventListener('keydown',e=>{if(e.key==='Enter'&&mode!=='ask'){e.preventDefault();newProblem();}});
+newProblem();
+})();
+</script></body></html>
