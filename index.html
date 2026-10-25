@@ -41,12 +41,8 @@ h1{font-size:clamp(22px,4vw,30px);margin:0 0 10px;text-align:center}
 .box.g .lab{background:var(--g);animation:fadein .4s ease-out calc(var(--d2) + 100ms) forwards}
 .box.l{animation:ringL .65s ease-out var(--d3) forwards}
 .box.l .lab{background:var(--o);animation:fadein .4s ease-out calc(var(--d3) + 100ms) forwards}
-.box.g .c{animation:toG .55s ease-out var(--d2) forwards}
-.box.l .c{animation:toL .55s ease-out var(--d3) forwards}
 @keyframes ringG{to{border-color:var(--g);background:#e7f5ee}}
 @keyframes ringL{to{border-color:var(--o);background:#fdf0df}}
-@keyframes toG{to{background:var(--g);border-color:#0e5f41}}
-@keyframes toL{to{background:var(--o);border-color:#a85f10}}
 .ans{display:flex;justify-content:center;align-items:flex-start;gap:14px;margin-top:26px;opacity:0;animation:fadein .65s ease-out var(--d4) forwards}
 .dgt{display:flex;flex-direction:column;align-items:center;gap:6px}
 .dgt .n{font-size:72px;font-weight:800;line-height:1}
